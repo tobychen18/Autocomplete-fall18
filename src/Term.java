@@ -91,6 +91,12 @@ public class Term implements Comparable<Term> {
 		 *            - Two Terms whose words are being compared
 		 */
 		public int compare(Term v, Term w) {
+			if(v.myWord.length() < myPrefixSize && v.myWord.length() < w.myWord.length()) {
+				return -1;
+			}
+			if(w.myWord.length() < myPrefixSize && w.myWord.length() < v.myWord.length()) {
+				return 1;
+			}
 			for(int i = 0; i< myPrefixSize ; i++) {
 				if(v.myWord.charAt(i) != w.myWord.charAt(i)) {
 					return v.myWord.charAt(i)-(w.myWord.charAt(i));
