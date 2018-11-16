@@ -100,9 +100,9 @@ public class Term implements Comparable<Term> {
 				return v.myWord.length() - w.myWord.length();
 			}
 			else {
-				for(int i = 0; i< myPrefixSize ; i++) {
+				for(int i = 0; i < myPrefixSize ; i++) {
 					if(v.myWord.charAt(i) != w.myWord.charAt(i)) {
-						return v.myWord.charAt(i)-(w.myWord.charAt(i));
+						return v.myWord.charAt(i)-w.myWord.charAt(i);
 					}
 				}
 			}
