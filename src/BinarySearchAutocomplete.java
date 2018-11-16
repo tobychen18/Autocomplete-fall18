@@ -109,7 +109,10 @@ public class BinarySearchAutocomplete implements Autocompletor {
 		Term termPrefix = new Term(prefix, 0);
 		int lowest = firstIndexOf(myTerms, termPrefix, new Term.PrefixOrder(prefix.length()));
 		int highest = lastIndexOf(myTerms, termPrefix, new Term.PrefixOrder(prefix.length()));
-		for(int i = lowest; i<=lowest+highest; i++) {
+		if(lowest == -1 || highest == -1) {
+			return list;
+		}
+		for(int i = lowest; i<= highest; i++) {
 			list.add(myTerms[i]);
 		}
 		Collections.sort(list, new Term.ReverseWeightOrder());
