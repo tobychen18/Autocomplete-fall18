@@ -92,6 +92,15 @@ public class Term implements Comparable<Term> {
 		 */
 		public int compare(Term v, Term w) {
 
+			int minOfV = Math.min(v.myWord.length(), myPrefixSize);
+			int minOfW = Math.min(w.myWord.length(), myPrefixSize);
+			int minOfBothWords = Math.min(minOfV, minOfW);
+			for(int i = 0; i < minOfBothWords ; i++) {
+				if(v.myWord.charAt(i) != w.myWord.charAt(i)) {
+					return v.myWord.charAt(i)-w.myWord.charAt(i);
+				}
+			}
+			/*
 			if(v.myWord.length() < myPrefixSize || v.myWord.length() < myPrefixSize) {
 
 				for(int j = 0; j< Math.min(v.myWord.length(),  w.myWord.length()) ; j++) {
@@ -107,9 +116,9 @@ public class Term implements Comparable<Term> {
 						return v.myWord.charAt(i)-w.myWord.charAt(i);
 					}
 				}
-			} 
+			} */
 
-			return 0;
+			return minOfV - minOfW;
 		}
 
 	}
