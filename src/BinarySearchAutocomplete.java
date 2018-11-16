@@ -105,6 +105,9 @@ public class BinarySearchAutocomplete implements Autocompletor {
 	 */
 	@Override
 	public List<Term> topMatches(String prefix, int k) {	
+		if(prefix == null) {
+			throw new NullPointerException("prefix is null: not valid");
+		}
 		ArrayList<Term> list = new ArrayList<>();
 		Term termPrefix = new Term(prefix, 0);
 		int lowest = firstIndexOf(myTerms, termPrefix, new Term.PrefixOrder(prefix.length()));
@@ -116,11 +119,6 @@ public class BinarySearchAutocomplete implements Autocompletor {
 			list.add(myTerms[i]);
 		}
 		Collections.sort(list, new Term.ReverseWeightOrder());
-//		ArrayList<Term> ret = new ArrayList<>();
-//		for(int j = 0; j <= k; j++) {
-//			ret.add(list.get(lowest+k));
-//		}
-//		return ret;
 		return list.subList(0, Math.min(k, list.size()));
 	}
 }
