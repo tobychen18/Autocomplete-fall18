@@ -100,24 +100,6 @@ public class Term implements Comparable<Term> {
 					return v.myWord.charAt(i)-w.myWord.charAt(i);
 				}
 			}
-			/*
-			if(v.myWord.length() < myPrefixSize || v.myWord.length() < myPrefixSize) {
-
-				for(int j = 0; j< Math.min(v.myWord.length(),  w.myWord.length()) ; j++) {
-					if(v.myWord.charAt(j) != w.myWord.charAt(j)) {
-						return v.myWord.charAt(j)-(w.myWord.charAt(j));
-					}
-				}
-				return v.myWord.length()-w.myWord.length();
-			}
-          else {
-				for(int i = 0; i < myPrefixSize ; i++) {
-					if(v.myWord.charAt(i) != w.myWord.charAt(i)) {
-						return v.myWord.charAt(i)-w.myWord.charAt(i);
-					}
-				}
-			} */
-
 			return minOfV - minOfW;
 		}
 
