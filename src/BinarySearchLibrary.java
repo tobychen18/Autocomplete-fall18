@@ -49,7 +49,7 @@ public class BinarySearchLibrary {
 		return high;
 		}
 		return -1;
-	}
+	}	
 
 	/**
 	 * Uses binary search to find the index of the last object in parameter

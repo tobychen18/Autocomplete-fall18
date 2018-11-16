@@ -112,7 +112,7 @@ public class BinarySearchAutocomplete implements Autocompletor {
 		for(int i = lowest; i<+highest; i++) {
 			list.add(myTerms[i]);
 		}
-		list.sort(new Term.ReverseWeightOrder());
+		Collections.sort(list, new Term.ReverseWeightOrder());
 //		ArrayList<Term> ret = new ArrayList<>();
 //		for(int j = 0; j <= k; j++) {
 //			ret.add(list.get(lowest+k));

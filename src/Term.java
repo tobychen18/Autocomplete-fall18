@@ -27,7 +27,7 @@ public class Term implements Comparable<Term> {
 	 *             if weight is negative
 	 */
 	public Term(String word, double weight) {
-		
+
 		// TODO: Complete Term constructor
 		if(word == null) {
 			throw new NullPointerException("Null term");
@@ -38,7 +38,7 @@ public class Term implements Comparable<Term> {
 		myWord = word;
 		myWeight = weight;
 	}
-	
+
 	/**
 	 * The default sorting of Terms is lexicographical ordering.
 	 */
@@ -60,7 +60,7 @@ public class Term implements Comparable<Term> {
 	public String toString() {
 		return String.format("(%2.1f,%s)", myWeight, myWord);
 	}
-	
+
 	@Override
 	public boolean equals(Object o) {
 		Term other = (Term) o;
@@ -91,21 +91,24 @@ public class Term implements Comparable<Term> {
 		 *            - Two Terms whose words are being compared
 		 */
 		public int compare(Term v, Term w) {
-			if(v.myWord.length() < myPrefixSize && v.myWord.length() < w.myWord.length()) {
-				return -1;
-			}
-			if(w.myWord.length() < myPrefixSize && w.myWord.length() < v.myWord.length()) {
-				return 1;
-			}
-			for(int i = 0; i< myPrefixSize ; i++) {
-				if(v.myWord.charAt(i) != w.myWord.charAt(i)) {
-					return v.myWord.charAt(i)-(w.myWord.charAt(i));
+			if(v.myWord.length() < myPrefixSize || v.myWord.length() < myPrefixSize) {
+				for(int j = 0; j< Math.min(v.myWord.length(),  w.myWord.length()) ; j++) {
+					if(v.myWord.charAt(j) != w.myWord.charAt(j)) {
+						return v.myWord.charAt(j)-(w.myWord.charAt(j));
+					}
 				}
 			}
-			
+			else {
+				for(int i = 0; i< myPrefixSize ; i++) {
+					if(v.myWord.charAt(i) != w.myWord.charAt(i)) {
+						return v.myWord.charAt(i)-(w.myWord.charAt(i));
+					}
+				}
+			}
+
 			return 0;
 		}
-	
+
 	}
 
 	/**
@@ -117,7 +120,7 @@ public class Term implements Comparable<Term> {
 	public static class ReverseWeightOrder implements Comparator<Term> {
 		public int compare(Term v, Term w) {
 			// TODO: implement compare
-			
+
 			return (int) -(v.getWeight() - w.getWeight());
 		}
 	}
@@ -130,7 +133,7 @@ public class Term implements Comparable<Term> {
 	 */
 	public static class WeightOrder implements Comparator<Term> {
 		public int compare(Term v, Term w) {
-			
+
 			return (int) (v.getWeight() - w.getWeight());
 		}
 	}
