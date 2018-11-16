@@ -118,6 +118,6 @@ public class BinarySearchAutocomplete implements Autocompletor {
 //			ret.add(list.get(lowest+k));
 //		}
 //		return ret;
-		return list.subList(lowest, lowest + k);
+		return list.subList(0, k);
 	}
 }
