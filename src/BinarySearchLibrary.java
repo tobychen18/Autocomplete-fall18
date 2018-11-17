@@ -33,26 +33,27 @@ public class BinarySearchLibrary {
 	               	T target, Comparator<T> comp) {
 		
 		
-		int low = -1;
-		int high = list.size()-1;
+		int low = -1; //set low = -1 so that we know the loop invariant is true
+		int high = list.size()-1; //set high = list.size -1 so that we know the loop invariant is true
 		if(list.size() < 1) {
-			return -1;
+			return -1; //if the list size is < 1 aka list is empty return -1 aka there is no first index
 		}
 		// (low,high] contains target
 		// TODO: complete method
-		while(low+1 != high) {
-			int mid = (low+high)/2;
-			if(comp.compare(list.get(mid), target) < 0) {
+		while(low+1 != high) { //as long as we haven't deduced our bounds to one single number
+			int mid = (low+high)/2; //the middle is the avg between low and high
+			if(comp.compare(list.get(mid), target) < 0) { //if the middle is smaller than our target, the we can set low = to mid because we know that it isn't low and will be higher than low
 				low = mid;
 			}
 			else {
-				high = mid;
+				high = mid; //otherwise if it is the same as our target make it equal high 
 			}
+			//keep going until you find the first one aka low is not target and high is target and it is the one right after low (low +1 )
 		}
-		if(comp.compare(list.get(high), target) == 0) {
+		if(comp.compare(list.get(high), target) == 0) { //check to make sure that our high value is indeed the same as our target
 		return high;
 		}
-		return -1;
+		return -1; //if our high value isn't the same as our target then the target doesn't exist so we return -1
 	}	
 
 	/**
@@ -71,28 +72,28 @@ public class BinarySearchLibrary {
 	int lastIndex(List<T> list, 
                	  T target, Comparator<T> comp) {
 		
-		
-		int low = 0;
-		int high = list.size();
+		//similar idea to firstIndex 
+		int low = 0; //set low = - so that we know the loop invariant is true
+		int high = list.size(); //set high = list.size so that we know the loop invariant is true
 		
 		if(list.size() < 1) {
-			return -1;
+			return -1; //if the list size is < 1 aka list is empty return -1 aka there is no last index of target
 		}
 		// target in [low,high)
 		// TODO: complete method
-		while(high-1 != low) {
+		while(high-1 != low) { //as long as we haven't deduced our bounds to one single number
 			int mid = (low+high)/2;
-			if(comp.compare(list.get(mid), target) > 0) {
-				high = mid;
+			if(comp.compare(list.get(mid), target) > 0) { //if the mid is greater than target then we can set our high to mid
+				high = mid; 
 			}
 			else {
-				low = mid;
+				low = mid; //else it is mid then we set low to mid and keep going until our low value is equal to target and the next value (high) is not equal to target
 			}
 		}
-		if(comp.compare(list.get(low), target) == 0) {
-		return low;
+		if(comp.compare(list.get(low), target) == 0) { //check to make sure that our low value is indeed the same as our target
+		return low; 
 		}
-		return -1;
+		return -1; //if our low value isn't the same as our target then the target doesn't exist so we return -1
 	}
 	
 }

@@ -30,10 +30,10 @@ public class Term implements Comparable<Term> {
 
 		// TODO: Complete Term constructor
 		if(word == null) {
-			throw new NullPointerException("Null term");
+			throw new NullPointerException("Null term"); //if word is null then throw null pointer exception
 		}
 		if(weight < 0) {
-			throw new IllegalArgumentException("negative weight " + weight);
+			throw new IllegalArgumentException("negative weight " + weight); //if weight < 0 then throw illegal argument
 		}
 		myWord = word;
 		myWeight = weight;
@@ -43,7 +43,7 @@ public class Term implements Comparable<Term> {
 	 * The default sorting of Terms is lexicographical ordering.
 	 */
 	public int compareTo(Term that) {
-		return myWord.compareTo(that.myWord);
+		return myWord.compareTo(that.myWord); //compare the word lexicographically
 	}
 
 	/**
@@ -76,8 +76,12 @@ public class Term implements Comparable<Term> {
 	public static class PrefixOrder implements Comparator<Term> {
 		private final int myPrefixSize;
 
+/**
+ * The constructor for prefix order, where we set the size of the prefix
+ * @param r is the size of the prefix we want to compare
+ */
 		public PrefixOrder(int r) {
-			this.myPrefixSize = r;
+			this.myPrefixSize = r; 
 		}
 
 		/**
@@ -86,21 +90,23 @@ public class Term implements Comparable<Term> {
 		 * considered equal. This method should take O(r) to run, and be
 		 * independent of the length of v and w's length. You can access the
 		 * Strings to compare using v.word and w.word.
-		 * 
+		 * If one string does not have enough letters, only compare those letters, and if those are the same return the bigger word
 		 * @param v/w
 		 *            - Two Terms whose words are being compared
 		 */
 		public int compare(Term v, Term w) {
 
-			int minOfV = Math.min(v.myWord.length(), myPrefixSize);
-			int minOfW = Math.min(w.myWord.length(), myPrefixSize);
-			int minOfBothWords = Math.min(minOfV, minOfW);
-			for(int i = 0; i < minOfBothWords ; i++) {
-				if(v.myWord.charAt(i) != w.myWord.charAt(i)) {
-					return v.myWord.charAt(i)-w.myWord.charAt(i);
+			int minOfV = Math.min(v.myWord.length(), myPrefixSize); //finds if the word in term v is smaller than myPrefixSize
+			int minOfW = Math.min(w.myWord.length(), myPrefixSize); //finds if the word in term w is smaller than myPrefixSize
+			int minOfBothWords = Math.min(minOfV, minOfW); //finds the smallest out of those two in order to compare them
+			for(int i = 0; i < minOfBothWords ; i++) { //compare the avaliable letters or up to myPrefixSize
+				if(v.myWord.charAt(i) != w.myWord.charAt(i)) { //if the characters are different
+					return v.myWord.charAt(i)-w.myWord.charAt(i); //return the difference between the characters
 				}
 			}
-			return minOfV - minOfW;
+			return minOfV - minOfW; //otherwise if the characters were all the same it means that the characters we were comparing were all the same. 
+			//If we compared the same lengths of W and V it means that the words w and v were the same
+			//if the lengths differ then return which one was bigger, aka the difference in sizes
 		}
 
 	}
@@ -114,7 +120,7 @@ public class Term implements Comparable<Term> {
 	public static class ReverseWeightOrder implements Comparator<Term> {
 		public int compare(Term v, Term w) {
 			// TODO: implement compare
-
+			//compares the weights of the terms if v.getWeight > w.getWeight you get a positive difference and you reverse it (with negative sign) so that it is in descending order
 			return (int) -(v.getWeight() - w.getWeight());
 		}
 	}
@@ -127,7 +133,8 @@ public class Term implements Comparable<Term> {
 	 */
 	public static class WeightOrder implements Comparator<Term> {
 		public int compare(Term v, Term w) {
-
+			//make it by weight in ascending order by just comparing which weight is bigger
+			//if v is heavier weight it will be positive so v is bigger than w aka after w
 			return (int) (v.getWeight() - w.getWeight());
 		}
 	}

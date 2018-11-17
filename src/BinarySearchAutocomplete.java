@@ -106,19 +106,19 @@ public class BinarySearchAutocomplete implements Autocompletor {
 	@Override
 	public List<Term> topMatches(String prefix, int k) {	
 		if(prefix == null) {
-			throw new NullPointerException("prefix is null: not valid");
+			throw new NullPointerException("prefix is null: not valid"); //if the prefix is null then throw a null pointer exception 
 		}
-		ArrayList<Term> list = new ArrayList<>();
-		Term termPrefix = new Term(prefix, 0);
-		int lowest = firstIndexOf(myTerms, termPrefix, new Term.PrefixOrder(prefix.length()));
-		int highest = lastIndexOf(myTerms, termPrefix, new Term.PrefixOrder(prefix.length()));
-		if(lowest == -1 || highest == -1) {
-			return list;
+		ArrayList<Term> list = new ArrayList<>(); //create an array list that will store our prefixes that match our prefixes. 
+		Term termPrefix = new Term(prefix, 0); //create a term that represents the prefix String, weight is irrelevant
+		int lowest = firstIndexOf(myTerms, termPrefix, new Term.PrefixOrder(prefix.length())); //
+		int highest = lastIndexOf(myTerms, termPrefix, new Term.PrefixOrder(prefix.length())); //
+		if(lowest == -1 || highest == -1) { //if the first term or the last term doesnt exist
+			return list; //then return nothing because our prefix isn't in our array
 		}
-		for(int i = lowest; i<= highest; i++) {
-			list.add(myTerms[i]);
+		for(int i = lowest; i<= highest; i++) { //loop from i, the first index to the highestindex so that you get all the terms with the same prefix
+			list.add(myTerms[i]); //add to the list all the terms with the same prefix
 		}
-		Collections.sort(list, new Term.ReverseWeightOrder());
-		return list.subList(0, Math.min(k, list.size()));
+		Collections.sort(list, new Term.ReverseWeightOrder()); //then sort the terms in descending weight order so that the highest weight is first
+		return list.subList(0, Math.min(k, list.size())); //take the part of the list up to k or up to everything in the list, which ever comes first
 	}
 }
