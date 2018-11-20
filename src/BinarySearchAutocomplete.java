@@ -110,8 +110,8 @@ public class BinarySearchAutocomplete implements Autocompletor {
 		}
 		ArrayList<Term> list = new ArrayList<>(); //create an array list that will store our prefixes that match our prefixes. 
 		Term termPrefix = new Term(prefix, 0); //create a term that represents the prefix String, weight is irrelevant
-		int lowest = firstIndexOf(myTerms, termPrefix, new Term.PrefixOrder(prefix.length())); //
-		int highest = lastIndexOf(myTerms, termPrefix, new Term.PrefixOrder(prefix.length())); //
+		int lowest = firstIndexOf(myTerms, termPrefix, new Term.PrefixOrder(prefix.length())); 
+		int highest = lastIndexOf(myTerms, termPrefix, new Term.PrefixOrder(prefix.length())); 
 		if(lowest == -1 || highest == -1) { //if the first term or the last term doesnt exist
 			return list; //then return nothing because our prefix isn't in our array
 		}

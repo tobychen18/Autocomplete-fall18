@@ -3,9 +3,39 @@ Put your name and netid here
 (1) Run the program BenchmarkForAutocomplete and copy/paste the 
 results here this for #matches = 20
 
+search	size	#match	binary	brute
+	456976  20 	0.3191  0.0123
+a 	17576  	20 	0.0052  0.0183
+b 	17576  	20 	0.0056  0.0049
+c 	17576  	20 	0.0053  0.0058
+x 	17576  	20 	0.0065  0.0055
+y 	17576  	20 	0.0059  0.0073
+z 	17576  	20 	0.0068  0.0062
+aa 	676  	20 	0.0003  0.0059
+az 	676  	20 	0.0002  0.0053
+za 	676  	20 	0.0002  0.0067
+zz 	676  	20 	0.0002  0.0070
+
+
 (2) Run the program again for #matches = 10000, paste the results, 
 and then make any conclusions about how the # matches 
 effects the runtime. 
+
+
+search 	size	#match 	binary	brute
+	456976	10000 	0.3486  0.0362
+a 	17576  	10000 	0.0066  0.0349
+b 	17576  	10000 	0.0068  0.0141
+c 	17576  	10000 	0.0081  0.0236
+x 	17576  	10000 	0.2025  0.0143
+y 	17576  	10000 	0.0063  0.0147
+z 	17576  	10000 	0.0060  0.0168
+aa 	676  	10000 	0.0003  0.0087
+az 	676  	10000 	0.0002  0.0119
+za 	676 	10000 	0.0003  0.0397
+zz 	676  	10000	0.0004  0.0221
+
+Increasing the size of matches has not really affected binary but has affected brute. Brute's time has increased a significant amount while binary has not increased by much.
 
 (3) Copy/paste the code from BruteAutocomplete.topMatches below. 
 Explain what the Big-Oh complexity of the entire loop: 
@@ -15,11 +45,45 @@ M, the number of terms that match the prefix.
 Assume that every priority-queue operation runs in O(log k) time. 
 Explain your answer which should be in terms of N, M, and k.
 
+The Big-Oh complexity for the entire loop: for(Term t : myTerms){...} is O(N) from the outside because we check every single term in myTerms so we must loop through all of myTerms of size N. If and only if this term has the same prefix we are looking for, we then compare that to our priority queue of size k and determine whether or not we are going to add this term to our priority queue using if statements which are O(1). If this term is greater than our smallest weighted term in the queue we add to the queue and the queue gets sorted. The sorting of the queue is a log complexity and there are k things in the priority queue to be sorted so the sorting of the queue is O(logK). We sort the queue at most M times because the only times we sort the queue are if the term is a match so worst case we have to resort for every single match so O(MlogK). Everything else is an O(1) complexity. This means our complexity in total is O(N) + O(MlogK) because we check every single thing in myTerms O(N) then we resort k elements at most M times for each of the matches we find O(MlogK). O(MlogK) dominates the runTime large matches.
+
+@Override
+	public List<Term> topMatches(String prefix, int k) {
+		if (k < 0) {
+			throw new IllegalArgumentException("Illegal value of k:"+k);
+		}
+		
+		// maintain pq of size k
+		PriorityQueue<Term> pq = new PriorityQueue<Term>(10, new Term.WeightOrder());
+		for (Term t : myTerms) {
+			if (!t.getWord().startsWith(prefix))
+				continue;
+			if (pq.size() < k) {
+				pq.add(t);
+			} else if (pq.peek().getWeight() < t.getWeight()) {
+				pq.remove();
+				pq.add(t);
+			}
+		}
+		int numResults = Math.min(k, pq.size());
+		LinkedList<Term> ret = new LinkedList<>();
+		for (int i = 0; i < numResults; i++) {
+			ret.addFirst(pq.remove());
+		}
+		return ret;
+	}
+
+
+
 (4) Explain why the last for loop in BruteAutocomplete.topMatches 
 uses a LinkedList (and not an ArrayList) 
 AND why the PriorityQueue uses Term.WeightOrder to get 
 the top k heaviest matches -- rather than 
 using Term.ReverseWeightOrder.
+
+It is more efficient to use a LinkedList rather than an ArrayList in BruteAutocomplete.topMatches because of the how the lists are being used. In BruteAutocomplete we are adding to the front of the List. Adding to the front of an ArrayList is extremely inefficient at O(n^2) because you have to shift everything over. However, adding to the front of a LinkedList is extremely efficient O(1) because you just have to add that pointer to the linkedList. Therefore, it makes sense because of the efficiency of adding to the front of LinkedList and inefficiency of adding to the front of an array list.
+
+BruteAutocomplete uses Term.weightOrder instead of Term.ReverseWeightOrder because we want the smallest numbers first and a priority queue does that. The priority queue will put the weights in order from smallest to largest using WeightOrder while reverseWeightOrder will put the weights in order from largest to smallest. We want the weights in order from smallest to largest because removing from a priority queue means removing the first element (pq.remove()) aka the smallest element. By using weight order, we compare everything based on the smallest term in the queue, contrary to reverseWeight where we will compare everything to the largest term in the queue. Since we want to make comparisons to the smallest term (to remove them) and we don't want to remove the heavy terms, we call pq.remove to remove all the smallest elements aka the ones at the beginning of the list so we want to sort the terms in ascending order from smallest to largest weight. 
 
 
 (5) Explain what the runtime of the 
@@ -27,4 +91,22 @@ BinarySearchAutocomplete.topMatches code that you
 implemented is by copy/pasting the code below 
 and explaining your answer in terms of N, M, and k.
 
+@Override
+	public List<Term> topMatches(String prefix, int k) {	
+		if(prefix == null) {
+			throw new NullPointerException("prefix is null: not valid"); 			}
+		ArrayList<Term> list = new ArrayList<>(); 
+		Term termPrefix = new Term(prefix, 0); 
+		int lowest = firstIndexOf(myTerms, termPrefix, new Term.PrefixOrder(prefix.length())); 
+		int highest = lastIndexOf(myTerms, termPrefix, new Term.PrefixOrder(prefix.length())); 
+		if(lowest == -1 || highest == -1) { 			
+			return list; 		
+		}
+		for(int i = lowest; i<= highest; i++) { 							list.add(myTerms[i]); 
+		}
+		Collections.sort(list, new Term.ReverseWeightOrder()); 
+		return list.subList(0, Math.min(k, list.size()));	}
+}
+
+The runtime of BinarySearchAutocomplete topMatches is as follows. The first non O(1) line of code is when we call firstIndexOf and lastIndexOf. firstIndexOf and lastIndexOf are both O(logN) complexity because of how it looks through the array by cutting down the middle each time to find the first and last index of what we are looking for respectively. So we have 2O(logN) and since coefficients don't matter for runtime complexities too much we have O(logN). We then take all our matches (M) and put it into an ArrayList which is O(M) and then we sort that. Each sort is log(M) since we are sorting all matches so we do a sort of all total matches (M). So we do a sort M times so our runtime for Collections.sort(list, new Term.ReverseWeightOrder()); is O(MlogM). Lastly, we return a subList of the first/highest weighted K terms in our sorted list which is O(K) runtime. In total that brings us to O(logN) + O(M) + O(MlogM) + O(k). O(MlogM) dominates at large matches and O(M) is very overshadowed by O(MlogM). So our runtimes is O(logN) + O(MlogM) + O(k). O(k) is typically very small relatively so that becomes irrelevant too. And our runtimes becomes O(logN) + O(MlogM) and MlogM dominates as matches become very high.
 
